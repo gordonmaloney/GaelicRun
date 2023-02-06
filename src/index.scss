@@ -1,0 +1,212 @@
+@font-face {
+  font-family: Upheav;
+  src: local('Upheav'), url(./Fonts/upheavtt.ttf) format('truetype');
+}
+
+body {
+  margin: 0;
+  font-family: 'Upheav';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-transform: uppercase;
+}
+
+$bg-color: #2b1165;
+$fg-color: #f54171;
+
+$bg-gradient: linear-gradient(
+ 180deg,
+ $bg-color 0%,
+ rgba(26, 58, 130, 1) 37%,
+ rgba(171, 36, 177, 1) 69%,
+ $fg-color 100%
+);
+$fg-gradient: linear-gradient(
+ 0deg,
+ $bg-color 0%,
+ rgba(26, 58, 130, 1) 37%,
+ rgba(171, 36, 177, 1) 69%,
+ $fg-color 100%
+);
+
+* {
+ box-sizing: border-box;
+}
+
+body {
+ background-color: $bg-color;
+ background: $bg-gradient;
+
+ margin: 0;
+ padding: 0;
+
+ display: flex;
+ align-items: center;
+ justify-content: center;
+
+ height: 100vh;
+ position: relative;
+ 
+ overflow: hidden;
+}
+
+.overlay {
+ display: block;
+ z-index: 0;
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100vw;
+ height: 100vh;
+ background-color: transparent;
+ background-size: 30px 30px;
+ background-position:  -12px;
+ background-image: linear-gradient(rgba(255,255,255,.05) 2px, transparent 2px),
+                   linear-gradient(90deg, rgba(255,255,255,.05) 2px, transparent 2px);
+}
+
+.glitch {
+  z-index: 1;
+  top: 0;
+  height: 15px;
+  -moz-box-shadow: 0 0 10px 10px rgba(240, 248, 255, 0.1);
+  -webkit-box-shadow: 0 0 10px 10px rgba(240, 248, 255, 0.1);
+ background-color: rgba(240, 248, 255, 0.08);
+ animation: glitch 4s linear infinite;
+ transform: translatex(.1rem) translatey(.1rem);
+}
+
+.glitch2 {
+  z-index: 1;
+  top: -20px;
+  height: 2px;
+  -moz-box-shadow: 0 0 10px 5px rgba(240, 248, 255, 0.05);
+  -webkit-box-shadow: 0 0 10px 5px rgba(240, 248, 255, 0.05);
+ background-color: rgba(240, 248, 255, 0.05);
+ animation: glitch 4s linear infinite;
+ animation-delay: 2.05s;
+ transform: translatex(.3rem) translatey(.2rem);
+}
+
+@keyframes glitch {
+ to {
+top: 100% }
+}
+
+a {
+  text-decoration: inherit;
+}
+
+h1 {
+  font-family: 'Upheav';
+  z-index: 5 !important;
+  font-size: 100px;
+  color: rgba(0, 255, 255, 0.9);
+  font-weight: 100;
+  animation: hflash 2s ease infinite;
+}
+
+h3 {
+  font-family: 'Upheav';
+  z-index: 5 !important;
+  font-size: 60px;
+  color: rgb(0, 255, 255);
+  text-shadow: 0 0 15px rgba(255,255,255,0.5);
+  font-weight: 100;
+  margin: 0;
+  animation: hflash 3s ease infinite;
+}
+
+@keyframes hflash {
+  0% {  text-shadow: 0 0 15px rgba(255,255,255,0.5), -3px 3px 0 #2b1165;  }
+  50% {  text-shadow: 0 0 10px rgba(255,255,255,0.5), -3px 3px 0 #2b1165;  }
+  100% {  text-shadow: 0 0 15px rgba(255,255,255,0.5), -3px 3px 0 #2b1165;  }
+
+}
+
+.PlayOuter {
+  height: 90vh;
+  width: 90vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scoreBox {
+  position: fixed;
+  top: 5vh;
+  right: 5vw;
+  text-align: right;
+  color: white;
+  font-size: x-large;
+}
+
+.lifeBox {
+  position: fixed;
+  top: 5vh;
+  left: 5vw;
+}
+
+.gameBox {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 300px !important;
+  max-width: 400px;
+  height: 250px;
+  z-index: 5;
+  border:5px solid black;
+  border-radius: 2px;
+  padding: 20px;
+  background-color: rgba(27, 22, 114, 0.8);
+    -moz-box-shadow: 5px 5px 10px 3px #080539;
+    -webkit-box-shadow: 5px 5px 10px 3px #080539;
+  animation: bounce 8s ease infinite;
+}
+
+.bounceBtn {
+  animation: bounce 8s ease infinite;
+}
+
+@keyframes bounce {
+  0% {transform: scale(1);     -moz-box-shadow: 5px 5px 10px 3px #080539;
+    -webkit-box-shadow: 5px 5px 8px 2px #080539;}
+  50% {transform: scale(1.03);    -moz-box-shadow: 5px 5px 15px 10px #080539;
+    -webkit-box-shadow: 6px 6px 15px 10px rgba(8, 5, 57, 0.8);}
+  100% {transform: scale(1);     -moz-box-shadow: 5px 5px 10px 3px #080539;
+    -webkit-box-shadow: 5px 5px 8px 2px #080539;}
+}
+
+.borderFlash {
+  background-color: #f54171;
+  border-radius: 5px;
+  padding: 2px;
+  animation: flash 1.5s ease infinite
+}
+
+@keyframes flash {
+  0% {  background-color: #f54171;}
+  50% {   background-color: transparent}
+  100% {  background-color: #f54171;}
+}
+
+
+.grade {
+  text-align: center;
+  color: rgba(0, 255, 255, 0.9);
+  text-shadow: 0 0 10px white;
+  font-size: 40px;
+}
+
+.fadeOut {
+  position: absolute;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.fadeIn {
+  position: absolute;
+  opacity: 1;
+  transition: 0.3s;
+}
