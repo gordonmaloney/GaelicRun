@@ -1,7 +1,7 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 import { Landing } from "./Landing";
-import { Play } from "./Play";
+import { PlayFrame } from "./PlayFrame";
 
 const App = () => {
   return (
@@ -13,7 +13,7 @@ const App = () => {
       <Routes>
         <Route path="/" exact element={<Landing />} />
 
-        <Route path="/play" element={<Play />} />
+        <Route path="/play" element={<PlayFrame />} />
       </Routes>
     </BrowserRouter>
   );

@@ -66,7 +66,7 @@ body {
 }
 
 .glitch {
-  z-index: 1;
+  z-index: 2;
   top: 0;
   height: 15px;
   -moz-box-shadow: 0 0 10px 10px rgba(240, 248, 255, 0.1);
@@ -77,7 +77,7 @@ body {
 }
 
 .glitch2 {
-  z-index: 1;
+  z-index: 2;
   top: -20px;
   height: 2px;
   -moz-box-shadow: 0 0 10px 5px rgba(240, 248, 255, 0.05);
@@ -130,6 +130,7 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .scoreBox {
@@ -166,7 +167,7 @@ h3 {
 }
 
 .bounceBtn {
-  animation: bounce 8s ease infinite;
+  animation: btnBounce 8s ease infinite;
 }
 
 @keyframes bounce {
@@ -175,6 +176,15 @@ h3 {
   50% {transform: scale(1.03);    -moz-box-shadow: 5px 5px 15px 10px #080539;
     -webkit-box-shadow: 6px 6px 15px 10px rgba(8, 5, 57, 0.8);}
   100% {transform: scale(1);     -moz-box-shadow: 5px 5px 10px 3px #080539;
+    -webkit-box-shadow: 5px 5px 8px 2px #080539;}
+}
+
+@keyframes btnBounce {
+  0% {transform: scale(1);     -moz-box-shadow: 5px 5px 10px 3px rgba(8, 5, 57, 0.3);
+    -webkit-box-shadow: 5px 5px 8px 2px #080539;}
+  50% {transform: scale(1.03);    -moz-box-shadow: 10px 10px 2px 2px rgba(8, 5, 57, 0.3);
+    -webkit-box-shadow: 6px 6px 15px 10px rgba(8, 5, 57, 0.8);}
+  100% {transform: scale(1);     -moz-box-shadow: 5px 5px 10px 3px rgba(8, 5, 57, 0.3);
     -webkit-box-shadow: 5px 5px 8px 2px #080539;}
 }
 
@@ -209,4 +219,56 @@ h3 {
   position: absolute;
   opacity: 1;
   transition: 0.3s;
+}
+
+.backBtn {
+  left: 200px;
+  position: absolute;
+  bottom: 20vh;
+  margin-bottom: 20px;
+}
+
+.screenBox {
+  height: 160px;
+  border: 5px solid rgb(113, 113, 113);
+  background-color: rgb(113, 113, 113);
+  border-radius: 7px;
+  margin-bottom: 10px;
+  z-index: 9;
+  position: relative;
+  -moz-box-shadow: 6px 6px 14px 6px #080539;
+  -webkit-box-shadow: 6px 6px 14px 6px #080539;
+
+}
+
+.screenOverlay {
+  position: absolute;
+  z-index: 8;
+  top: 0;
+  left: 0;
+  border-radius: 7px;
+  width: 200px;
+  height: 150px;
+  background-color: transparent;
+  background-size: 2px 5px;
+  background-position: 0;
+  animation: scanlines 4s ease infinite;
+} 
+
+
+
+
+@keyframes scanlines {
+  0% {
+    background-size: 2px 5px;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+  }
+  50% {
+        background-size: 2px 2px;
+        background-image: linear-gradient(rgba(255,255,255,0.09) 1px, transparent 1px);
+  }
+  100% {
+    background-size: 2px 5px;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+  }
 }
