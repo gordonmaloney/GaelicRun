@@ -1,6 +1,6 @@
 import React from "react";
-import { bg, bg2, player } from "./Game/Canvas";
-import { useState, useEffect, useRef } from "react";
+import { player } from "./Game/Canvas";
+import { useState, useEffect } from "react";
 import { obstacle } from "./Game/Canvas";
 import { Grid, TextField, Button, FormControl } from "@mui/material";
 import { BtnStyleSmall, BtnStyle } from "./MuiStyles";
@@ -59,6 +59,9 @@ function shuffle(array) {
 }
 
 export const PlayForm = () => {
+
+
+
   const [WORDS, setWords] = useState(WORDS2.filter((word) => word.article));
 
   useEffect(() => {
@@ -68,7 +71,6 @@ export const PlayForm = () => {
   //this will be moved to redux
   const dispatch = useDispatch();
   const { settings } = useSelector((state) => state.settings);
-
   const skill = settings.skill; //"article" or "plural" or "genitive"
 
   const [index, setIndex] = useState(0);
@@ -101,27 +103,15 @@ export const PlayForm = () => {
     setOptions(shuffle(newArr));
   }, [question]);
 
-  const [started, setStarted] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
-  let localHighScore = JSON.parse(localStorage.getItem("highscore"));
-  useEffect(() => {
-    localHighScore &&
-      localHighScore > highScore &&
-      setHighScore(localHighScore);
-  }, [localHighScore]);
   const [finalScore, setFinalScore] = useState(0);
   const [input, setInput] = useState("");
   const [lives, setLives] = useState(3);
-  const [win, setWin] = useState(false);
-  useEffect(() => {
-    win && setFinalScore(score);
-    win && localStorage.setItem("highscore", score);
-  }, [win]);
+
   const [mistakes, setMistakes] = useState([]);
   const [checking, setChecking] = useState(false);
   const [correct, setCorrect] = useState("");
-  const inputField = useRef(null);
 
   const handleSubmit = (word) => {
     let checking;
@@ -150,10 +140,10 @@ export const PlayForm = () => {
     setCorrect("correct");
     setTimeout(() => {
       setScore((prev) => prev + 1);
-      index < WORDS.length - 1 ? setIndex((prev) => prev + 1) : setWin(true);
+      setIndex((prev) => prev + 1);
     }, 500);
     setTimeout(() => {
-      index < WORDS.length - 1 && restart();
+      restart();
     }, 1200);
   };
 
@@ -178,7 +168,6 @@ export const PlayForm = () => {
     setFinalScore(score);
     if (score > highScore) {
       setHighScore(score);
-      localStorage.setItem("highscore", score);
     }
     setOpen(true);
   };
@@ -186,28 +175,14 @@ export const PlayForm = () => {
   const handleReset = () => {
     setScore(0);
     setLives(3);
-    setWin(false);
     setCorrect("");
     setChecking(false);
-    setMistakes([]);
     restart();
-    setStarted(false);
   };
-
-  const idle = () => {
-    player.status = "idle";
-    player.switchSprite("Idle");
-  };
-  !started && idle();
-
   useEffect(() => {
-    win && idle();
-  }, [win]);
+    handleReset();
+  }, []);
 
-  const run = () => {
-    player.status = "running";
-    player.switchSprite("Run");
-  };
   const jump = () => {
     player.status = "running";
     player.velocity.y = -7.5;
@@ -251,17 +226,6 @@ export const PlayForm = () => {
     }
   };
 
-
-
-  //check if the keyboard is in focus on mobile, in order to adjust the view
-  const [keyboardFocus, setKeyboardFocus] = useState(false)
-  const handleKeyboardFocus = ({focus}) => {
-    if (isMobile) {
-      if (focus) setKeyboardFocus(true)
-      if (!focus) setKeyboardFocus(false)
-    }
-  }
-
   return (
     <>
       <div className="PlayOuter">
@@ -290,58 +254,19 @@ export const PlayForm = () => {
           </Grid>
         </div>
 
-        {!keyboardFocus && <div className="screenBox" style={{ opacity: "0" }}></div>}
+        <div className="screenBox" style={{ opacity: "0" }}></div>
 
-        <div className={`gameBox ${keyboardFocus && 'gameBoxMini'}`}>
+        <div className="gameBox">
           <div
             className={
-              (checking && correct == "correct") || win
+              checking && correct == "correct"
                 ? "grade fadeIn"
                 : "grade fadeOut"
             }
           >
-            {!win ? (
-              <>
-                <span style={{ fontSize: "70px", color: "green" }}>
-                  {score}
-                </span>
-                <div>correct</div>
-              </>
-            ) : (
-              <>
-                {" "}
-                You win!!!
-                <br />
-                score: {score}
-                <br />
-                <Button
-                  onClick={() => handleReset()}
-                  sx={{
-                    ...BtnStyleSmall,
-                    marginTop: "10px",
-                    fontSize: "0.4em",
-                    zIndex: 10,
-                  }}
-                  type="button"
-                >
-                  play again
-                </Button>{" "}
-                <Button
-                  onClick={() => handleOpen()}
-                  sx={{
-                    ...BtnStyleSmall,
-                    marginTop: "10px",
-                    fontSize: "0.4em",
-                    zIndex: 10,
-                  }}
-                  type="button"
-                >
-                  share
-                </Button>
-              </>
-            )}
+            <span style={{ fontSize: "70px", color: "green" }}>{score}</span>
+            <div>correct</div>
           </div>
-
           <div
             className={
               checking && correct == "incorrect"
@@ -398,79 +323,35 @@ export const PlayForm = () => {
               top: "2px",
               left: "4px",
               color: "white",
-              display: win ? "none" : "block",
             }}
           >
-            {started && !keyboardFocus && <>You're training: {skill}s</>}
+            You're training: {skill}s
           </span>
 
-          {!started && (
-            <div
-              className={started ? "fadeOut" : "fadeIn"}
-              style={{ display: lives > 0 ? "block" : "hide" }}
-            >
-              <center>
-                <p
-                  style={{
-                    color: "white",
-                    fontSize: "large",
-                    padding: "0 15px",
-                  }}
-                >
-                  You're training: {skill}s
-                  <br />
-                  <br />
-                  You'll be given a noun, and need to{" "}
-                  {settings.multiplechoice ? "pick" : "type"}{" "}
-                  {skill == "article" && (
-                    <>the correct form of the word with the right article</>
-                  )}
-                  {skill == "genitive" && <>the genitive form</>}
-                  {skill == "plural" && <>the plural form</>}
-                  <br />
-                  <br />
-                  Hit start to begin
-                </p>
-                <Button
-                  sx={{ ...BtnStyleSmall, zIndex: 8 }}
-                  onClick={() => {
-                    setStarted(true);
-                    run();
-                  }}
-                >
-                  Start
-                </Button>
-              </center>
-            </div>
-          )}
           <div
-            className={checking || win || !started ? "fadeOut" : "fadeIn"}
+            className={checking ? "fadeOut" : "fadeIn"}
             style={{ display: lives > 0 ? "block" : "hide" }}
           >
             <center>
               <h3>{question}</h3>
-              {!keyboardFocus && <br />}
+
+              <br />
 
               {multipleChoice ? (
                 <>
-                  {options.map(
-                    (option) =>
-                      option && (
-                        <Button
-                          sx={{ ...BtnStyleSmall, margin: "5px" }}
-                          onClick={() => handleSubmit(option)}
-                        >
-                          {option}
-                        </Button>
-                      )
-                  )}
+                  {options.map((option) => (
+                    option && <Button
+                      sx={{ ...BtnStyleSmall, margin: "5px" }}
+                      onClick={() => handleSubmit(option)}
+                    >
+                      {option}
+                    </Button>
+                  ))}
                 </>
               ) : (
                 <form onSubmit={(e) => e.preventDefault()}>
                   <div className="borderFlash" style={{ width: "90%" }}>
                     <NoBorderTextField
-                      onFocus={() => handleKeyboardFocus({focus: true})}
-                      onBlur={() => handleKeyboardFocus({focus: false})}
                       autoComplete="off"
                       value={input}
                       autoFocus={!isMobile}
@@ -487,8 +368,7 @@ export const PlayForm = () => {
                       onChange={(e) => setInput(e.target.value.toLowerCase())}
                     />
                   </div>
-                  {!keyboardFocus && <>
-                    <br />
+                  <br />
                   <Button
                     type="submit"
                     sx={BtnStyleSmall}
@@ -496,7 +376,7 @@ export const PlayForm = () => {
                     disabled={(lives == 0 || input == "" || checking) && true}
                   >
                     Submit
-                  </Button></>}
+                  </Button>
                 </form>
               )}
             </center>

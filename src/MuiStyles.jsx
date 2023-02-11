@@ -3,7 +3,7 @@ export const BtnStyle = {
   borderRadius: "1px",
   color: "white",
   backgroundColor: "#1b1672",
-  fontSize: "1.6em",
+  fontSize: "1.5em",
   "&:hover, &:active": { backgroundColor: "white", color: "#1b1672" },
 };
 

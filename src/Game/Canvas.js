@@ -4,6 +4,7 @@ import run from "../GameAssets/run.png";
 import alien from "../GameAssets/alien.png";
 import crashing from "../GameAssets/crashed.png";
 import jumping from "../GameAssets/jump.png";
+import idle from "../GameAssets/idle.png"
 import { Player } from "./Classes";
 import { Sprite } from "./Classes";
 
@@ -24,6 +25,10 @@ export const player = new Player({
       imageSrc: jumping,
       frameRate: 6,
     },
+    Idle: {
+      imageSrc: idle,
+      frameRate: 4
+    }
   },
 });
 
@@ -39,12 +44,13 @@ export const bg = new Sprite({
   frameRate: 1,
 });
 export const bg2 = new Sprite({
-  position: { x: bg.image.width, y: -25 },
+  position: { x: bg.image.width-210, y: -25 },
   imageSrc: bgImg,
   frameRate: 1,
 });
 
 export const gravity = 0.3;
+
 
 export const Canvas = () => {
   //canvas
@@ -98,17 +104,18 @@ export const Canvas = () => {
         bgSpeed = 0;
         player.switchSprite("Crash");
       } else {
-        if (!crashed) bgSpeed = 4.5;
+        if (!crashed) bgSpeed = 4.5
       }
 
+      if (player.status !== "idle"){
       bg.position.x -= bgSpeed;
       bg2.position.x -= bgSpeed;
       if (bg.position.x < -bg.image.width) {
-        bg.position.x = bg2.position.x + bg2.image.width;
+        bg.position.x = bg2.position.x + bg2.image.width - 20;
       }
       if (bg2.position.x < -bg.image.width) {
-        bg2.position.x = bg.position.x + bg2.image.width;
-      }
+        bg2.position.x = bg.position.x + bg2.image.width - 20;
+      }}
 
       bg.update(c);
       bg2.update(c);
@@ -119,7 +126,8 @@ export const Canvas = () => {
       obstacle.draw(c);
       obstacle.update(c);
 
-      if (player.position.y > 85) {
+      
+      if (player.position.y > 85 && player.status !== "idle") {
         player.switchSprite("Run");
       }
       if (

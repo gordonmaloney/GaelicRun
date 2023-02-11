@@ -1,0 +1,38 @@
+//python script to fetch plurals
+//python script to fetch genitives
+//generate multiple options for:
+    //articles
+    //plurals
+    //genitives
+//multiple choice options for:
+    //articles
+    //plurals
+    //genitives
+//make lowercase 
+//randomise word order
+
+
+//handle no words left but not dead
+
+//fix background glitch
+
+//set up redux for: levels, multiple choice, accents, skill
+
+//how to play dialogue
+
+//incorp idle sprite, start screen
+
+//double check lives working right
+
+//local storage stuff
+//highscore in local storage too
+//incorp donate stuff!!
+
+
+//mobile layout issue on focus keyboard
+other mobile layout stuff
+
+process more words 
+
+
+get tested!

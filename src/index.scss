@@ -3,6 +3,23 @@
   src: local('Upheav'), url(./Fonts/upheavtt.ttf) format('truetype');
 }
 
+@font-face {
+  font-family: ShareTech;
+  src: local('ShareTech'), url(./Fonts/ShareTechMono-Regular.ttf) format('truetype');
+}
+
+p {
+  font-family: 'ShareTech';
+  text-transform: none;
+  line-height: 17px;
+}
+
+.shareTech {
+  font-family: 'ShareTech';
+  text-transform: none;
+  line-height: 17px;
+}
+
 body {
   margin: 0;
   font-family: 'Upheav';
@@ -155,7 +172,7 @@ h3 {
   align-items: center;
   min-width: 300px !important;
   max-width: 400px;
-  height: 250px;
+  height: 240px;
   z-index: 5;
   border:5px solid black;
   border-radius: 2px;
@@ -164,6 +181,10 @@ h3 {
     -moz-box-shadow: 5px 5px 10px 3px #080539;
     -webkit-box-shadow: 5px 5px 10px 3px #080539;
   animation: bounce 8s ease infinite;
+}
+
+.gameBoxMini {
+  height: 140px;
 }
 
 .bounceBtn {
@@ -270,5 +291,42 @@ h3 {
   100% {
     background-size: 2px 5px;
     background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+  }
+}
+
+.shareMsg {
+  margin: 0 40px 20px 40px;
+  padding: 5px 10px;
+  color: black;
+  background-color: white;
+}
+
+
+
+.showOnMob {
+  visibility: hidden;
+height: 0px !important;
+}
+.hideOnMob {
+  visibility: visible;
+}
+
+@media screen and (max-width: 600px) {
+  .hideOnMob {
+    visibility: hidden;
+  }
+  .showOnMob {
+    visibility: visible;
+    height: 35px !important;
+  }
+  h1 {
+    font-size: 80px;
+    line-height: 60px;
+  }
+  .lifeBox {
+    margin-top: -25px
+  }
+  .scoreBox {
+    margin-top: -25px
   }
 }
