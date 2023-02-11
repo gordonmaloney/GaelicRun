@@ -28,11 +28,7 @@ export const Landing = () => {
   const dispatch = useDispatch();
   const { settings } = useSelector((state) => state.settings);
   //check for local storage settings and update if they're there
-
   let localSettings = JSON.parse(localStorage.getItem("settings"))
-
-  console.log(localSettings, settings )
-
   useEffect(() => {
     if (localSettings?.skill) {
     if (

@@ -30,9 +30,23 @@
 
 
 //mobile layout issue on focus keyboard
-other mobile layout stuff
 
-process more words 
 
+//favicon
+
+//improve layout of settings modal
+//more words 
+
+
+//fix button highlights on multiple choice
+
+//select vocab
+
+proof lives stuff
+
+//words too long for box???
+
+//fix mobile thing on textfield 
+proof for other mobile layout stuff
 
 get tested!

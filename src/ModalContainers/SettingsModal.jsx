@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button, Grid } from "@mui/material";
-import { BtnStyleSmall } from "../MuiStyles";
+import { BtnStyleSmall, BtnStyleTiny } from "../MuiStyles";
 import Switch from "@mui/material/Switch";
-
+import { StyledSwitch } from "../MuiStyles";
 import { Slider } from "@mui/material";
+import { WORDS2 } from "../WORDS";
 
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
@@ -11,6 +12,7 @@ import { setSettings } from "../Redux/Slice";
 import { useEffect } from "react";
 
 const active = { backgroundColor: "white", color: "#f54171" };
+const inactive = { backgroundColor: "lightgrey", color: "white" };
 
 export const SettingsModal = () => {
   //redux logic
@@ -19,19 +21,27 @@ export const SettingsModal = () => {
 
   const [tab, setTab] = useState("");
 
+  const Levels = Array.from(new Set([...WORDS2.map((word) => word.level)]));
+
+  const [oneLevel, setOneLevel] = useState(false);
+
+  useEffect(() => {
+    if (settings.vocab.length > 1) setOneLevel(false);
+  }, [settings.vocab.length]);
+
   const One = () => {
     return (
       <Grid container alignItems={"center"}>
         <Grid item xs={12}>
           <Grid container alignItems={"center"}>
-            <Grid item xs={6}>
-              <span className="shareTech">Check for accents:</span>
+            <Grid item xs={8}>
+              <span className="shareTech settingHeader">
+                Check for accents:
+              </span>
               <br />
             </Grid>
-            <Grid item xs={6}>
-              off{" "}
-              <Switch
-                color="secondary"
+            <Grid item xs={2}>
+              <StyledSwitch
                 checked={settings.checkaccents}
                 onChange={() =>
                   dispatch(
@@ -41,12 +51,18 @@ export const SettingsModal = () => {
                     })
                   )
                 }
-              />{" "}
-              on
+              />
+            </Grid>
+
+            <Grid item xs={2}>
+              {settings.checkaccents ? "on" : "off"}
             </Grid>
           </Grid>
-          <span className="shareTech">When off, you won't have to worry about typing the correct accents on
-          words.</span>
+          <span className="shareTech">
+            <br />
+            When off, you won't have to worry about typing the correct accents
+            on words.
+          </span>
           <br />
           <br />
           <br />
@@ -54,14 +70,12 @@ export const SettingsModal = () => {
 
         <Grid item xs={12}>
           <Grid container alignItems={"center"}>
-            <Grid item xs={6}>
-            <span className="shareTech">Multiple choice:</span>
+            <Grid item xs={8}>
+              <span className="shareTech settingHeader">Multiple choice:</span>
               <br />
             </Grid>
-            <Grid item xs={6}>
-              off{" "}
-              <Switch
-                color="secondary"
+            <Grid item xs={2}>
+              <StyledSwitch
                 checked={settings.multiplechoice}
                 onChange={() =>
                   dispatch(
@@ -71,12 +85,17 @@ export const SettingsModal = () => {
                     })
                   )
                 }
-              />{" "}
-              on
+              />
+            </Grid>
+            <Grid item xs={2}>
+              {settings.multiplechoice ? "on" : "off"}
             </Grid>
           </Grid>
-          <span className="shareTech">When off, you will have to type the word. When on, you will be given
-          three options to pick from.</span>
+          <span className="shareTech">
+            <br />
+            When off, you will have to type the word. When on, you will be given
+            three options to pick from.
+          </span>
           <br />
           <br />
           <br />
@@ -84,14 +103,14 @@ export const SettingsModal = () => {
 
         <Grid item xs={12}>
           <Grid container alignItems={"center"}>
-            <Grid item xs={6}>
-            <span className="shareTech">Show answer on submit:</span>
+            <Grid item xs={8}>
+              <span className="shareTech settingHeader">
+                Show answer on submit:
+              </span>
               <br />
             </Grid>
-            <Grid item xs={6}>
-              off{" "}
-              <Switch
-                color="secondary"
+            <Grid item xs={2}>
+              <StyledSwitch
                 checked={settings.showanswer}
                 onChange={() =>
                   dispatch(
@@ -101,12 +120,18 @@ export const SettingsModal = () => {
                     })
                   )
                 }
-              />{" "}
-              on
+              />
+            </Grid>
+
+            <Grid item xs={2}>
+              {settings.showanswer ? "on" : "off"}
             </Grid>
           </Grid>
-          <span className="shareTech">When on, this will show you the correct answer if you submit the wrong
-          one.</span>
+          <span className="shareTech">
+            <br />
+            When on, this will show you the correct answer if you submit the
+            wrong one.
+          </span>
           <br />
           <br />
           <br />
@@ -118,57 +143,116 @@ export const SettingsModal = () => {
   const Two = () => {
     return (
       <>
-        <p>
-          Choose which lessons you want to study the vocabulary from
-        <br />
-        <br />
-        This is the beta version, with vocab from level one only. More to come soon!</p>
+        <p style={{ marginTop: 0 }}>
+          <span className="settingHeader">
+            Choose which lessons you want to study the vocabulary from
+          </span>
+          <br />
+          <br />
+          {oneLevel && <>You need at least one level to play</>}
+          <center>
+            {Levels.map((level) => (
+              <React.Fragment key={level}>
+                {settings.vocab.includes(level) ? (
+                  <Button
+                    onClick={() => {
+                      settings.vocab.length == 1
+                        ? setOneLevel(true)
+                        : dispatch(
+                            setSettings({
+                              ...settings,
+                              vocab: [
+                                ...settings.vocab.filter(
+                                  (filt) => filt !== level
+                                ),
+                              ],
+                            })
+                          );
+                    }}
+                    sx={{ ...BtnStyleTiny }}
+                  >
+                    {level}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      dispatch(
+                        setSettings({
+                          ...settings,
+                          vocab: [...settings.vocab, level],
+                        })
+                      );
+                    }}
+                    sx={{ ...BtnStyleTiny, ...inactive }}
+                  >
+                    {level}
+                  </Button>
+                )}
+              </React.Fragment>
+            ))}
+            <br />
+            <br />
+            {settings.vocab.length < Levels.length && (
+              <Button
+                sx={BtnStyleSmall}
+                onClick={() =>
+                  dispatch(setSettings({ ...settings, vocab: Levels }))
+                }
+              >
+                Select all
+              </Button>
+            )}
+          </center>
+        </p>
       </>
     );
   };
 
-  
   const Three = () => {
     return (
       <>
-        <span className="shareTech">Choose what you want to train: <br />
-  </span>
-        <Button
-          sx={
-            settings.skill == "article"
-              ? { ...BtnStyleSmall, margin: "5px", ...active }
-              : { ...BtnStyleSmall, margin: "5px" }
-          }
-          onClick={() =>
-            dispatch(setSettings({ ...settings, skill: "article" }))
-          }
-        >
-          Articles
-        </Button>
-        <Button
-          sx={
-            settings.skill == "genitive"
-              ? { ...BtnStyleSmall, margin: "5px", ...active }
-              : { ...BtnStyleSmall, margin: "5px" }
-          }
-          onClick={() =>
-            dispatch(setSettings({ ...settings, skill: "genitive" }))
-          }
-        >
-          Genitives
-        </Button>
-        <Button
-          sx={
-            settings.skill == "plural"
-              ? { ...BtnStyleSmall, margin: "5px", ...active }
-              : { ...BtnStyleSmall, margin: "5px" }
-          }
-          onClick={() =>
-            dispatch(setSettings({ ...settings, skill: "plural" }))
-          }
-        >
-          plurals
-        </Button>
+        <span className="shareTech settingHeader">
+          Choose what you want to train: <br />
+          <br />
+        </span>
+        <center>
+          <Button
+            sx={
+              settings.skill == "article"
+                ? { ...BtnStyleSmall, margin: "5px", ...active }
+                : { ...BtnStyleSmall, margin: "5px" }
+            }
+            onClick={() =>
+              dispatch(setSettings({ ...settings, skill: "article" }))
+            }
+          >
+            Articles
+          </Button>
+          <Button
+            sx={
+              settings.skill == "genitive"
+                ? { ...BtnStyleSmall, margin: "5px", ...active }
+                : { ...BtnStyleSmall, margin: "5px" }
+            }
+            onClick={() =>
+              dispatch(setSettings({ ...settings, skill: "genitive" }))
+            }
+          >
+            Genitives
+          </Button>
+          <Button
+            sx={
+              settings.skill == "plural"
+                ? { ...BtnStyleSmall, margin: "5px", ...active }
+                : { ...BtnStyleSmall, margin: "5px" }
+            }
+            onClick={() =>
+              dispatch(setSettings({ ...settings, skill: "plural" }))
+            }
+          >
+            plurals
+          </Button>
+        </center>
       </>
     );
   };
@@ -177,32 +261,64 @@ export const SettingsModal = () => {
     <div
       style={{ marginTop: "-15px", marginLeft: "-10px", marginRight: "-10px" }}
     >
-      <span style={{ fontSize: "40px" }}>settings</span>
+      <h3 style={{ fontSize: "xx-large" }}>settings</h3>
+
       <br />
       <br />
-      <Grid container width={"100%"} spacing={1}>
+      <Grid container spacing={1}>
         <Grid item id="menu" xs={12} sm={2}>
           <Grid container spacing={2}>
             <Grid item>
-              <Button onClick={() => setTab("Three")} sx={{ ...BtnStyleSmall }}>
+              <Button
+                onClick={() => setTab("Three")}
+                sx={
+                  tab == "Three"
+                    ? { ...BtnStyleSmall, ...active }
+                    : { ...BtnStyleSmall }
+                }
+              >
                 skill
               </Button>
             </Grid>
             <Grid item>
-              <Button onClick={() => setTab("One")} sx={{ ...BtnStyleSmall }}>
+              <Button
+                onClick={() => setTab("One")}
+                sx={
+                  tab == "One"
+                    ? { ...BtnStyleSmall, ...active }
+                    : { ...BtnStyleSmall }
+                }
+              >
+                {" "}
                 input
               </Button>
             </Grid>
             <Grid item>
-              <Button onClick={() => setTab("Two")} sx={BtnStyleSmall}>
+              <Button
+                onClick={() => setTab("Two")}
+                sx={
+                  tab == "Two"
+                    ? { ...BtnStyleSmall, ...active }
+                    : { ...BtnStyleSmall }
+                }
+              >
                 vocab
               </Button>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item id="content" xs={10}>
+
+        <Grid item xs={12} sx={{ display: { xs: "block", sm: "none" } }}>
+          <hr />
+        </Grid>
+
+        <Grid item id="content" xs={12} sm={10}>
+          {tab == "" && (
+            <p>You can change the settings using the buttons here.</p>
+          )}
           {tab == "One" && <One />}
-          {tab == "Two" && <Two />} {tab == "Three" && <Three />}
+          {tab == "Two" && <Two />}
+          {tab == "Three" && <Three />}
         </Grid>
       </Grid>
     </div>

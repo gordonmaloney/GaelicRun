@@ -243,10 +243,7 @@ h3 {
 }
 
 .backBtn {
-  left: 200px;
-  position: absolute;
-  bottom: 20vh;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .screenBox {
@@ -301,7 +298,9 @@ h3 {
   background-color: white;
 }
 
-
+.settingHeader {
+  font-size: large
+}
 
 .showOnMob {
   visibility: hidden;

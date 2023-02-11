@@ -24,7 +24,7 @@ export const ShareModal = ({ mistakes, score }) => {
 
   return (
     <div style={{ marginTop: "-15px" }}>
-      <span style={{ fontSize: "40px" }}>SHARE YOUR SCORE</span>
+      <h3 style={{fontSize: 'xx-large'}}>Share your score</h3>
 
       <br />
       <br />
@@ -86,7 +86,7 @@ export const ShareModal = ({ mistakes, score }) => {
           <Grid item sx={{ display: { xs: "hide", sm: "block" } }} xs={12}>
             <center>
               <Button
-                href={`https://twitter.com/intent/tweet?text=I%20scored%20${score}%20on%20%23GaelicRun%0A%0A${mistakes ? `The%20words%20that%20tripped%20me%20up%20were%3A%0A-%20${mistakes[0]}%0A-%20${mistakes[1]}%0A-%20${mistakes[2]}`: `And%20I%20got%20every%20question%20right!!`}%0A%0ACan%20you%20do%20better%3F%20GaelicRun.netlify.app`}
+                href={`https://twitter.com/intent/tweet?text=I%20scored%20${score}%20on%20%23GaelicRun%0A%0A${mistakes ? `The%20words%20that%20tripped%20me%20up%20were%3A%0A-%20${mistakes[0]}%0A-%20${mistakes[1]}%0A-%20${mistakes[2]}`: `And%20I%20got%20every%20question%20right!!`}%0A%0ACan%20you%20do%20better%3F%20GaelicRun.gordonmaloney.info`}
                 target="_blank"
                 sx={BtnStyleSmall}
               >
@@ -124,7 +124,7 @@ export const ShareModal = ({ mistakes, score }) => {
                 sx={BtnStyleSmall}
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `I scored ${score} on #GaelicRun!\n\nThe words that tripped me up were:\n-${mistakes[0]}\n-${mistakes[1]}\n-${mistakes[2]}\n\nCan you do better? GaelicRun.netlify.app`
+                    `I scored ${score} on #GaelicRun!\n\nThe words that tripped me up were:\n-${mistakes[0]}\n-${mistakes[1]}\n-${mistakes[2]}\n\nCan you do better? GaelicRun.gordonmaloney.info`
                   );
                   setTooltipOpen(true);
                 }}

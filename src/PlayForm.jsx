@@ -59,20 +59,47 @@ function shuffle(array) {
 }
 
 export const PlayForm = () => {
-  const [WORDS, setWords] = useState(WORDS2.filter((word) => word.article));
-
-  useEffect(() => {
-    setWords(shuffle(WORDS2.filter((word) => word.article)));
-  }, []);
+  const [WORDS, setWords] = useState([
+    ...shuffle(WORDS2.filter((word) => word.article)),
+  ]);
 
   //this will be moved to redux
   const dispatch = useDispatch();
   const { settings } = useSelector((state) => state.settings);
 
+  useEffect(() => {
+    setWords(
+      shuffle(
+        WORDS2.filter((word) => word.article).filter((filt) =>
+          settings.vocab.includes(filt.level)
+        )
+      )
+    );
+  }, [settings]);
+
+  //check for local storage settings and update if they're there
+  let localSettings = JSON.parse(localStorage.getItem("settings"));
+  useEffect(() => {
+    if (localSettings?.skill) {
+      if (
+        settings.skill !== localSettings.skill ||
+        settings.multiplechoice !== localSettings.multiplechoice ||
+        settings.showanswer !== localSettings.showanswer ||
+        settings.vocab !== localSettings.vocab ||
+        settings.checkaccents !== localSettings.checkaccents
+      ) {
+        console.log("dont match!");
+        dispatch(setSettings(localSettings));
+      } else console.log("matching!");
+    } else {
+      console.log("no local settings");
+    }
+  }, []);
+
   const skill = settings.skill; //"article" or "plural" or "genitive"
 
   const [index, setIndex] = useState(0);
-  let question = WORDS[index].back.toLowerCase();
+  let question = WORDS[index]?.back.toLowerCase();
   let answer = WORDS[index][skill].toLowerCase();
 
   //generate randomise multiple choices
@@ -183,7 +210,17 @@ export const PlayForm = () => {
     setOpen(true);
   };
 
+  useEffect(() => {
+    handleReset();
+  }, [settings]);
   const handleReset = () => {
+    setWords(
+      shuffle(
+        WORDS2.filter((word) => word.article).filter((filt) =>
+          settings.vocab.includes(filt.level)
+        )
+      )
+    );
     setScore(0);
     setLives(3);
     setWin(false);
@@ -251,16 +288,14 @@ export const PlayForm = () => {
     }
   };
 
-
-
   //check if the keyboard is in focus on mobile, in order to adjust the view
-  const [keyboardFocus, setKeyboardFocus] = useState(false)
-  const handleKeyboardFocus = ({focus}) => {
+  const [keyboardFocus, setKeyboardFocus] = useState(false);
+  const handleKeyboardFocus = ({ focus }) => {
     if (isMobile) {
-      if (focus) setKeyboardFocus(true)
-      if (!focus) setKeyboardFocus(false)
+      if (focus) setKeyboardFocus(true);
+      if (!focus) setKeyboardFocus(false);
     }
-  }
+  };
 
   return (
     <>
@@ -290,9 +325,11 @@ export const PlayForm = () => {
           </Grid>
         </div>
 
-        {!keyboardFocus && <div className="screenBox" style={{ opacity: "0" }}></div>}
+        {!keyboardFocus ? (
+          <div className="screenBox" style={{ opacity: "0" }}></div>
+        ): <><br/><br/><br/><br/></>}
 
-        <div className={`gameBox ${keyboardFocus && 'gameBoxMini'}`}>
+        <div className={`gameBox ${keyboardFocus && "gameBoxMini"}`}>
           <div
             className={
               (checking && correct == "correct") || win
@@ -448,7 +485,7 @@ export const PlayForm = () => {
             style={{ display: lives > 0 ? "block" : "hide" }}
           >
             <center>
-              <h3>{question}</h3>
+              <h3 style={{fontSize: '33px'}}>{question}</h3>
               {!keyboardFocus && <br />}
 
               {multipleChoice ? (
@@ -457,6 +494,7 @@ export const PlayForm = () => {
                     (option) =>
                       option && (
                         <Button
+                          key={option}
                           sx={{ ...BtnStyleSmall, margin: "5px" }}
                           onClick={() => handleSubmit(option)}
                         >
@@ -469,8 +507,8 @@ export const PlayForm = () => {
                 <form onSubmit={(e) => e.preventDefault()}>
                   <div className="borderFlash" style={{ width: "90%" }}>
                     <NoBorderTextField
-                      onFocus={() => handleKeyboardFocus({focus: true})}
-                      onBlur={() => handleKeyboardFocus({focus: false})}
+                      onFocus={() => handleKeyboardFocus({ focus: true })}
+                      onBlur={() => handleKeyboardFocus({ focus: false })}
                       autoComplete="off"
                       value={input}
                       autoFocus={!isMobile}
@@ -487,16 +525,21 @@ export const PlayForm = () => {
                       onChange={(e) => setInput(e.target.value.toLowerCase())}
                     />
                   </div>
-                  {!keyboardFocus && <>
-                    <br />
-                  <Button
-                    type="submit"
-                    sx={BtnStyleSmall}
-                    onClick={handleSubmit}
-                    disabled={(lives == 0 || input == "" || checking) && true}
+                  <div
+                    style={{
+                      transform: keyboardFocus ? "scale(0.0001)" : "scale(1)",
+                    }}
                   >
-                    Submit
-                  </Button></>}
+                    <br />
+                    <Button
+                      type="submit"
+                      sx={BtnStyleSmall}
+                      onClick={handleSubmit}
+                      disabled={(lives == 0 || input == "" || checking) && true}
+                    >
+                      Submit
+                    </Button>
+                  </div>
                 </form>
               )}
             </center>
@@ -504,7 +547,7 @@ export const PlayForm = () => {
         </div>
       </div>
 
-      <div id="backBtn">
+      <div className="backBtn">
         <center>
           <Link to="../">
             <Button

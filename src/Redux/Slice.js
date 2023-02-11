@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   settings: {
-    vocab: [],
+    vocab: ["Intro"],
     multiplechoice: false,
     showanswer: false,
     skill: "article",
