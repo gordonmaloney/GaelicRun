@@ -165,7 +165,7 @@ export const PlayForm = () => {
     }
     setInput("");
     setTimeout(() => {
-      if (lives > 1) {
+      if (lives > 0) {
         setCorrect("");
         setChecking(false);
       }

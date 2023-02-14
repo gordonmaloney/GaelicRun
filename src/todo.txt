@@ -42,11 +42,12 @@
 
 //select vocab
 
-proof lives stuff
-
 //words too long for box???
 
 //fix mobile thing on textfield 
+
+proof lives stuff
+
 proof for other mobile layout stuff
 
 get tested!
